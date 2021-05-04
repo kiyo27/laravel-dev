@@ -6,6 +6,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use App\Models\Article;
 use App\Models\User;
+use App\Policies\ArticlePolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        // Article::class => ArticlePolicy::class
     ];
 
     /**
@@ -27,14 +29,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::before(function ($user, $ability) {
-            if ($user->role === 'admin') {
-                return true;
-            }
-        });
+        // Gate::before(function ($user, $ability) {
+        //     if ($user->role === 'admin') {
+        //         return true;
+        //     }
+        // });
 
-        Gate::define('update-article', function (User $user, Article $article) {
-            return $user->id === $article->user_id;
-        });
+        // Gate::define('update-article', function (User $user, Article $article) {
+        //     return $user->id === $article->user_id;
+        // });
     }
 }
