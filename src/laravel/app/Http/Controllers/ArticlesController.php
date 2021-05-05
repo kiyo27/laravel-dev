@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArticlesRequest;
 use App\Models\Article;
 use App\Models\Tag;
 use Carbon\Carbon;
@@ -26,17 +27,19 @@ class ArticlesController extends Controller
         return view('articles.add', ['tags' => $tags]);
     }
 
-    public function create(Request $request)
+    public function create(ArticlesRequest $request)
     {
+        $validated = $request->validated();
+
         $article = Article::create([
-            'title' => $request->title,
-            'body' => $request->body,
+            'title' => $validated->title,
+            'body' => $validated->body,
             'user_id' => Auth::id(),
-            'slug' => $request->title,
+            'slug' => $validated->title,
         ]);
 
         // 中間テーブルにtagを登録
-        $article->tags()->attach($request->tags);
+        $article->tags()->attach($validated->tags);
 
         return redirect('/articles');
     }

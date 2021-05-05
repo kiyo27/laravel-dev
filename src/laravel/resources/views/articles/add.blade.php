@@ -15,11 +15,17 @@
                         <div class="grid grid-cols-1 gap-6">
                             <label class="block">
                                 <span class="text-gray-700">Title</span>
-                                <input type="text" name="title" class="mt-1 block w-full">
+                                <input type="text" name="title" class="mt-1 block w-full @error('title') border-red-500 @enderror" value="{{ old('title') }}">
+                                @error('title')
+                                <p class="text-red-500 text-xs italic mt-3">{{ $message }}</p>
+                                @enderror
                             </label>
                             <label class="block">
                                 <span class="text-gray-700">Body</span>
-                                <textarea class="mt-1 block w-full" rows="3" name="body"></textarea>
+                                <textarea class="mt-1 block w-full @error('body') border-red-500 @enderror" rows="3" name="body">{{ old('body') }}</textarea>
+                                @error('body')
+                                <p class="text-red-500 text-xs italic mt-3">{{ $message }}</p>
+                                @enderror
                             </label>
                             <div class="block">
                                 @foreach($tags as $tag)
