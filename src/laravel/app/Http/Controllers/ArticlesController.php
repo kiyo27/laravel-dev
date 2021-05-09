@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ArticlesRequest;
 use App\Models\Article;
 use App\Models\Tag;
+use App\Scopes\PublishedScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,7 @@ class ArticlesController extends Controller
     {
         // $articles = Article::all();
         $articles = Article::with('tags')->get();
+        // $articles = Article::withoutGlobalScope(PublishedScope::class)->with('tags')->get();
         return view('articles.index', ['articles' => $articles]);
     }
 
@@ -30,16 +32,16 @@ class ArticlesController extends Controller
     public function create(ArticlesRequest $request)
     {
         $validated = $request->validated();
-
+        
         $article = Article::create([
-            'title' => $validated->title,
-            'body' => $validated->body,
+            'title' => $validated['title'],
+            'body' => $validated['body'],
             'user_id' => Auth::id(),
-            'slug' => $validated->title,
+            'slug' => $validated['title'],
         ]);
 
         // 中間テーブルにtagを登録
-        $article->tags()->attach($validated->tags);
+        $article->tags()->attach($request->tags);
 
         return redirect('/articles');
     }

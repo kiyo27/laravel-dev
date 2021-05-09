@@ -25,6 +25,8 @@ class AddDeletedAtCreateArticleTagTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('article_tag', function (Blueprint $table) {
+            $table->dropColumn('deleted_at');
+        });
     }
 }
